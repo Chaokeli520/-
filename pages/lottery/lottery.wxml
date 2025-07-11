@@ -1,0 +1,75 @@
+<!--pages/lottery/lottery.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">🎉 幸运大转盘 🎉</text>
+    <text class="subtitle">今日剩余抽奖次数：{{lotteryCount}} 次</text>
+  </view>
+
+  <view class="lottery-section">
+    <view class="wheel-container">
+      <view class="wheel" style="transform: rotate({{rotateAngle}}deg);">
+        <view 
+          wx:for="{{prizes}}" 
+          wx:key="id" 
+          class="prize-item"
+          style="transform: rotate({{index * 60}}deg); background-color: {{item.color}};"
+        >
+          <view class="prize-content" style="transform: rotate(-{{index * 60}}deg);">
+            <text class="prize-icon">{{item.icon}}</text>
+            <text class="prize-name">{{item.name}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="pointer">📍</view>
+      
+      <button 
+        class="lottery-btn {{isDrawing ? 'drawing' : ''}}" 
+        bindtap="startLottery"
+        disabled="{{isDrawing || lotteryCount <= 0}}"
+      >
+        <text wx:if="{{!isDrawing}}">{{lotteryCount > 0 ? '开始抽奖' : '次数用完'}}</text>
+        <text wx:else>抽奖中...</text>
+      </button>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="action-btn" bindtap="getMoreChances">获取更多机会</button>
+    <button class="action-btn" bindtap="viewRecords">中奖记录</button>
+    <button class="action-btn" bindtap="viewRules">抽奖规则</button>
+  </view>
+
+  <view class="records-section" wx:if="{{winRecords.length > 0}}">
+    <view class="section-title">最近中奖记录</view>
+    <scroll-view scroll-y="true" class="records-list">
+      <view wx:for="{{winRecords}}" wx:key="id" class="record-item">
+        <view class="record-info">
+          <text class="record-prize">{{item.prize.icon}} {{item.prize.name}}</text>
+          <text class="record-date">{{item.date}}</text>
+        </view>
+        <button class="use-btn {{item.used ? 'used' : ''}}" data-id="{{item.id}}" bindtap="usePrize" disabled="{{item.used}}">
+          {{item.used ? '已使用' : '使用'}}
+        </button>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="result-mask" wx:if="{{showResult}}" bindtap="closeResult">
+    <view class="result-dialog" catchtap="">
+      <view class="result-header">
+        <text class="result-title">🎊 恭喜中奖 🎊</text>
+      </view>
+      <view class="result-content">
+        <view class="prize-display">
+          <text class="prize-big-icon">{{currentPrize.icon}}</text>
+          <text class="prize-big-name">{{currentPrize.name}}</text>
+          <text class="prize-big-desc">{{currentPrize.description}}</text>
+        </view>
+      </view>
+      <view class="result-footer">
+        <button class="confirm-btn" bindtap="closeResult">确认</button>
+      </view>
+    </view>
+  </view>
+</view>

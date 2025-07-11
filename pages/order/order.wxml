@@ -1,0 +1,115 @@
+<!--pages/order/order.wxml-->
+<view class="container">
+  <!-- 分类导航 -->
+  <view class="category-nav">
+    <scroll-view scroll-x="true" class="category-scroll">
+      <view class="category-list">
+        <view 
+          wx:for="{{categories}}" 
+          wx:key="id"
+          class="category-item {{currentCategory === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="switchCategory"
+        >
+          <text class="category-icon">{{item.icon}}</text>
+          <text class="category-name">{{item.name}}</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="products-container">
+    <scroll-view scroll-y="true" class="products-scroll">
+      <view class="products-list">
+        <view 
+          wx:for="{{products}}" 
+          wx:key="id"
+          wx:if="{{item.categoryId === currentCategory}}"
+          class="product-item"
+          data-id="{{item.id}}"
+          bindtap="viewProductDetail"
+        >
+          <view class="product-image">
+            <!-- 这里可以放实际的商品图片 -->
+            <view class="placeholder-image"></view>
+          </view>
+          
+          <view class="product-info">
+            <view class="product-header">
+              <text class="product-name">{{item.name}}</text>
+              <view class="product-stats">
+                <text class="sales">月售{{item.sales}}</text>
+                <text class="rating">⭐{{item.rating}}</text>
+              </view>
+            </view>
+            
+            <text class="product-desc">{{item.description}}</text>
+            
+            <view class="product-footer">
+              <view class="price-section">
+                <text class="current-price">¥{{item.price}}</text>
+                <text wx:if="{{item.originalPrice}}" class="original-price">¥{{item.originalPrice}}</text>
+              </view>
+              
+              <view class="cart-controls">
+                <button 
+                  class="add-btn" 
+                  data-id="{{item.id}}"
+                  bindtap="addToCart"
+                  catchtap="addToCart"
+                >
+                  +
+                </button>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 购物车底栏 -->
+  <view class="cart-bar" wx:if="{{cartCount > 0}}">
+    <view class="cart-info" bindtap="toggleCartDetail">
+      <view class="cart-icon-section">
+        <view class="cart-icon">🛒</view>
+        <view class="cart-badge">{{cartCount}}</view>
+      </view>
+      <view class="cart-price">
+        <text class="total-price">¥{{cartTotal}}</text>
+        <text class="delivery-tip">配送费另计</text>
+      </view>
+    </view>
+    
+    <button class="checkout-btn" bindtap="goToCheckout">
+      去结算
+    </button>
+  </view>
+
+  <!-- 购物车详情弹窗 -->
+  <view class="cart-detail-mask" wx:if="{{showCartDetail}}" bindtap="toggleCartDetail">
+    <view class="cart-detail" catchtap="">
+      <view class="cart-header">
+        <text class="cart-title">购物车</text>
+        <button class="clear-btn" bindtap="clearCart">清空</button>
+      </view>
+      
+      <scroll-view scroll-y="true" class="cart-items">
+        <view wx:for="{{cart}}" wx:key="id" class="cart-item">
+          <view class="item-info">
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-options">{{item.selectedOptions.size}} {{item.selectedOptions.sugar}} {{item.selectedOptions.ice}}</text>
+            <text class="item-price">¥{{item.price}}</text>
+          </view>
+          
+          <view class="quantity-controls">
+            <button class="quantity-btn" data-id="{{item.id}}" bindtap="removeFromCart">-</button>
+            <text class="quantity">{{item.quantity}}</text>
+            <button class="quantity-btn" data-id="{{item.id}}" bindtap="addToCart">+</button>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

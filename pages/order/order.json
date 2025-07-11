@@ -1,6 +1,6 @@
 {
   "usingComponents": {},
-  "navigationBarTitleText": "日志",
+  "navigationBarTitleText": "点餐",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark"
 }

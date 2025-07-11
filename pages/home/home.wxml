@@ -1,0 +1,98 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+  <!-- 品牌头部 -->
+  <view class="brand-header">
+    <view class="brand-logo">
+      <image src="/images/logo.png" mode="aspectFit" class="logo-img"></image>
+    </view>
+    <view class="brand-info">
+      <text class="brand-name">{{companyInfo.name}}</text>
+      <text class="brand-slogan">{{companyInfo.slogan}}</text>
+    </view>
+  </view>
+
+  <!-- 轮播图 -->
+  <view class="banner-section">
+    <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500" bindchange="onSwiperChange">
+      <swiper-item wx:for="{{bannerList}}" wx:key="id" class="banner-item">
+        <view class="banner-content">
+          <text class="banner-title">{{item.title}}</text>
+          <text class="banner-subtitle">{{item.subtitle}}</text>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 公司介绍 -->
+  <view class="company-intro">
+    <view class="section-title">品牌故事</view>
+    <view class="intro-content">
+      <text class="intro-text">{{companyInfo.description}}</text>
+    </view>
+    <view class="features">
+      <view wx:for="{{companyInfo.features}}" wx:key="title" class="feature-item">
+        <text class="feature-icon">{{item.icon}}</text>
+        <view class="feature-text">
+          <text class="feature-title">{{item.title}}</text>
+          <text class="feature-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 热门推荐 -->
+  <view class="hot-products">
+    <view class="section-title">热门推荐</view>
+    <view class="products-grid">
+      <view wx:for="{{hotProducts}}" wx:key="id" class="product-card" data-id="{{item.id}}" bindtap="viewProduct">
+        <view class="product-image"></view>
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <view class="product-price-section">
+            <text class="product-price">¥{{item.price}}</text>
+            <text wx:if="{{item.originalPrice}}" class="original-price">¥{{item.originalPrice}}</text>
+          </view>
+          <view class="product-stats">
+            <text class="product-sales">月售{{item.sales}}</text>
+            <text class="product-rating">{{item.rating}}⭐</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 立即点餐按钮 -->
+  <view class="order-section">
+    <button class="order-btn" bindtap="goToOrder">立即点餐</button>
+  </view>
+
+  <!-- 门店信息 -->
+  <view class="store-info">
+    <view class="section-title">门店信息</view>
+    <view class="info-item" bindtap="viewLocation">
+      <text class="info-label">地址：</text>
+      <text class="info-value">{{storeInfo.address}}</text>
+      <text class="info-arrow">></text>
+    </view>
+    <view class="info-item" bindtap="makeCall">
+      <text class="info-label">电话：</text>
+      <text class="info-value">{{storeInfo.phone}}</text>
+      <text class="info-arrow">📞</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">营业时间：</text>
+      <text class="info-value">{{storeInfo.hours}}</text>
+    </view>
+    <view class="info-item">
+      <text class="info-label">配送说明：</text>
+      <text class="info-value">{{storeInfo.delivery}}</text>
+    </view>
+  </view>
+  
+  <!-- 快速入口 -->
+  <view class="quick-actions">
+    <button class="quick-btn lottery-btn" bindtap="goToLottery">
+      🎁 免费抽奖
+    </button>
+  </view>
+</view>

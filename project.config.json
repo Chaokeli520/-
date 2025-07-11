@@ -49,7 +49,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
   "appid": "your-appid-here",
-  "projectname": "微信小程序",
+  "projectname": "悠然奶茶小程序",
   "debugOptions": {
     "hidedInDevtools": []
   },

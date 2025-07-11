@@ -1,32 +1,39 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/logs/logs"
+    "pages/home/home",
+    "pages/order/order",
+    "pages/lottery/lottery"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "微信小程序",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "#f8f8f8"
+    "navigationBarBackgroundColor": "#8B4513",
+    "navigationBarTitleText": "悠然奶茶",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
+    "color": "#999999",
+    "selectedColor": "#8B4513",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/home/home",
         "iconPath": "images/icon_home.png",
         "selectedIconPath": "images/icon_home_HL.png",
         "text": "首页"
       },
       {
-        "pagePath": "pages/logs/logs",
-        "iconPath": "images/icon_logs.png",
-        "selectedIconPath": "images/icon_logs_HL.png",
-        "text": "日志"
+        "pagePath": "pages/order/order",
+        "iconPath": "images/icon_order.png",
+        "selectedIconPath": "images/icon_order_HL.png",
+        "text": "点餐"
+      },
+      {
+        "pagePath": "pages/lottery/lottery",
+        "iconPath": "images/icon_lottery.png",
+        "selectedIconPath": "images/icon_lottery_HL.png",
+        "text": "抽奖"
       }
     ]
   },
