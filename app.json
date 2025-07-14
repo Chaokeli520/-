@@ -1,32 +1,39 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/logs/logs"
+    "pages/home/home",
+    "pages/order/order",
+    "pages/lottery/lottery"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "我的小程序",
-    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#8B4513",
+    "navigationBarTitleText": "茶语堂",
+    "navigationBarTextStyle": "white",
     "enablePullDownRefresh": false
   },
   "tabBar": {
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
+    "color": "#8B4513",
+    "selectedColor": "#D2691E",
+    "borderStyle": "white",
+    "backgroundColor": "#FFF8DC",
     "list": [
       {
-        "pagePath": "pages/index/index",
-        "iconPath": "images/icon_component.png",
-        "selectedIconPath": "images/icon_component_HL.png",
-        "text": "首页"
+        "pagePath": "pages/home/home",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home_active.png",
+        "text": "京西智谷"
       },
       {
-        "pagePath": "pages/logs/logs",
-        "iconPath": "images/icon_API.png",
-        "selectedIconPath": "images/icon_API_HL.png",
-        "text": "日志"
+        "pagePath": "pages/order/order",
+        "iconPath": "images/order.png",
+        "selectedIconPath": "images/order_active.png",
+        "text": "点单"
+      },
+      {
+        "pagePath": "pages/lottery/lottery",
+        "iconPath": "images/lottery.png",
+        "selectedIconPath": "images/lottery_active.png",
+        "text": "抽奖"
       }
     ]
   },
