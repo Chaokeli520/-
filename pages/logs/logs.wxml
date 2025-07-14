@@ -1,0 +1,22 @@
+<!--pages/logs/logs.wxml-->
+<view class="container log-list">
+  <view class="page-title">应用日志</view>
+  
+  <view wx:if="{{logs.length > 0}}" class="log-content">
+    <block wx:for="{{logs}}" wx:key="timeStamp">
+      <view class="log-item card">
+        <text class="log-text">{{index + 1}}. {{item.date}}</text>
+      </view>
+    </block>
+    
+    <view class="btn-area">
+      <button class="btn clear-btn" bindtap="clearLogs">清空日志</button>
+      <button class="btn back-btn" bindtap="goBack">返回首页</button>
+    </view>
+  </view>
+  
+  <view wx:else class="empty-logs">
+    <text class="empty-text">暂无日志记录</text>
+    <button class="btn back-btn margin-top" bindtap="goBack">返回首页</button>
+  </view>
+</view>

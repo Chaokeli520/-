@@ -1,0 +1,60 @@
+/**pages/logs/logs.wxss**/
+.log-list {
+  padding: 40rpx;
+}
+
+.log-content {
+  width: 100%;
+}
+
+.log-item {
+  margin-bottom: 20rpx;
+  padding: 30rpx;
+  background-color: #f8f9fa;
+  border-left: 6rpx solid #07c160;
+}
+
+.log-text {
+  color: #333;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.btn-area {
+  margin-top: 50rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.clear-btn {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.clear-btn:hover {
+  background-color: #ff5252;
+}
+
+.back-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+.empty-logs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+}
+
+.empty-text {
+  color: #999;
+  font-size: 32rpx;
+  margin-bottom: 40rpx;
+}

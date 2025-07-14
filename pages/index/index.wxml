@@ -1,0 +1,36 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="page-title">欢迎使用微信小程序</view>
+  
+  <view class="userinfo">
+    <block wx:if="{{canIUseOpenData}}">
+      <view class="userinfo-avatar" bindtap="bindViewTap">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <open-data type="userNickName"></open-data>
+    </block>
+    <block wx:elif="{{!hasUserInfo}}">
+      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile" class="btn userinfo-btn"> 获取头像昵称 </button>
+      <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="btn userinfo-btn"> 获取头像昵称 </button>
+      <view wx:else class="userinfo-tip"> 请使用1.4.4及以上版本基础库 </view>
+    </block>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+
+  <!-- 功能按钮区域 -->
+  <view class="function-area">
+    <view class="card">
+      <view class="card-title">基础功能</view>
+      <button class="btn margin-top" bindtap="showToast">显示提示</button>
+      <button class="btn margin-top" bindtap="showModal">显示弹窗</button>
+      <button class="btn margin-top" bindtap="goToLogs">查看日志</button>
+    </view>
+  </view>
+</view>
