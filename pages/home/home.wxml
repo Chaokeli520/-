@@ -1,0 +1,77 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+  <!-- 顶部轮播图 -->
+  <view class="banner-section">
+    <swiper class="banner-swiper" 
+            current="{{currentBanner}}" 
+            bindchange="onBannerChange"
+            indicator-dots="true"
+            indicator-color="rgba(255,255,255,0.5)"
+            indicator-active-color="#D2691E"
+            autoplay="true"
+            interval="3000"
+            circular="true">
+      <swiper-item wx:for="{{bannerImages}}" wx:key="index">
+        <image src="{{item}}" class="banner-image" mode="aspectFill"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 公司介绍卡片 -->
+  <view class="company-card">
+    <view class="card-header">
+      <view class="company-name">{{companyInfo.name}}</view>
+      <view class="company-location">📍 {{companyInfo.location}}</view>
+    </view>
+    
+    <view class="company-description">
+      {{companyInfo.description}}
+    </view>
+    
+    <view class="action-buttons">
+      <button class="btn-detail" bindtap="showCompanyDetail">了解详情</button>
+      <button class="btn-contact" bindtap="contactUs">联系我们</button>
+    </view>
+  </view>
+
+  <!-- 特色功能展示 -->
+  <view class="features-section">
+    <view class="section-title">企业特色</view>
+    <view class="features-grid">
+      <view class="feature-item" wx:for="{{companyInfo.features}}" wx:key="title">
+        <view class="feature-icon">{{item.icon}}</view>
+        <view class="feature-title">{{item.title}}</view>
+        <view class="feature-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 茶语堂推广卡片 -->
+  <view class="tea-promotion-card">
+    <view class="tea-header">
+      <view class="tea-icon">🍵</view>
+      <view class="tea-name">{{teaInfo.name}}</view>
+    </view>
+    
+    <view class="tea-description">
+      {{teaInfo.description}}
+    </view>
+    
+    <view class="tea-highlight">
+      <view class="highlight-text">{{teaInfo.highlight}}</view>
+    </view>
+    
+    <button class="order-btn" bindtap="goToOrder">
+      <view class="btn-content">
+        <text class="btn-text">立即点单</text>
+        <text class="btn-icon">🎯</text>
+      </view>
+    </button>
+  </view>
+
+  <!-- 底部装饰 -->
+  <view class="bottom-decoration">
+    <view class="decoration-text">京西智谷 · 科技创新</view>
+    <view class="decoration-line"></view>
+  </view>
+</view>

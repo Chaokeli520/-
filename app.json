@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/order/order",
+    "pages/lottery/lottery"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#8B4513",
+    "navigationBarTitleText": "茶语堂",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#8B4513",
+    "selectedColor": "#D2691E",
+    "borderStyle": "white",
+    "backgroundColor": "#FFF8DC",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home_active.png",
+        "text": "京西智谷"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "iconPath": "images/order.png",
+        "selectedIconPath": "images/order_active.png",
+        "text": "点单"
+      },
+      {
+        "pagePath": "pages/lottery/lottery",
+        "iconPath": "images/lottery.png",
+        "selectedIconPath": "images/lottery_active.png",
+        "text": "抽奖"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

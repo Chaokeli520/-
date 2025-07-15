@@ -1,0 +1,151 @@
+<!--pages/lottery/lottery.wxml-->
+<view class="container">
+  <!-- 头部信息 -->
+  <view class="header">
+    <view class="title">🎉 茶语堂抽奖</view>
+    <view class="subtitle">完成订单即可参与抽奖</view>
+    <view class="lottery-info">
+      <view class="info-item">
+        <text class="info-label">剩余次数</text>
+        <text class="info-value">{{userLotteryCount}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">总抽奖次数</text>
+        <text class="info-value">{{totalLotteryCount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 抽奖转盘 -->
+  <view class="lottery-wheel-container">
+    <view class="wheel-wrapper">
+      <!-- 转盘背景 -->
+      <view 
+        class="lottery-wheel {{isSpinning ? 'spinning' : ''}}"
+        style="transform: rotate({{wheelAngle}}deg);">
+        <view 
+          class="prize-sector"
+          wx:for="{{prizes}}"
+          wx:key="id"
+          style="background: {{item.color}}; transform: rotate({{item.startAngle}}deg);">
+          <view class="prize-content">
+            <view class="prize-icon">{{item.icon}}</view>
+            <view class="prize-name">{{item.name}}</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 中心指针 -->
+      <view class="wheel-pointer"></view>
+      
+      <!-- 中心按钮 -->
+      <view class="center-button {{isSpinning ? 'spinning' : ''}}" bindtap="startLottery">
+        <view class="center-text">
+          <text wx:if="{{!isSpinning}}">开始\n抽奖</text>
+          <text wx:else>抽奖中...</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能按钮区 -->
+  <view class="action-buttons">
+    <button class="action-btn rule-btn" bindtap="showLotteryRules">
+      <text class="btn-icon">📋</text>
+      <text class="btn-text">抽奖规则</text>
+    </button>
+    
+    <button class="action-btn chance-btn" bindtap="getMoreChance">
+      <text class="btn-icon">🎯</text>
+      <text class="btn-text">获得机会</text>
+    </button>
+  </view>
+
+  <!-- 抽奖历史 -->
+  <view class="history-section" wx:if="{{lotteryHistory.length > 0}}">
+    <view class="history-header">
+      <view class="history-title">🏆 抽奖记录</view>
+      <view class="history-clear" bindtap="clearHistory">清空</view>
+    </view>
+    
+    <scroll-view scroll-y="true" class="history-list">
+      <view 
+        class="history-item"
+        wx:for="{{lotteryHistory}}"
+        wx:key="id">
+        <view class="history-prize">
+          <text class="history-icon">{{item.prize.icon}}</text>
+          <text class="history-name">{{item.prize.name}}</text>
+        </view>
+        <view class="history-time">{{item.time}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 抽奖结果弹窗 -->
+  <view class="result-modal" wx:if="{{showResult}}">
+    <view class="result-mask" bindtap="closeResult"></view>
+    <view class="result-content">
+      <view class="result-header">
+        <view class="result-title">🎉 恭喜您！</view>
+      </view>
+      
+      <view class="result-prize">
+        <view class="result-icon">{{currentPrize.icon}}</view>
+        <view class="result-name">{{currentPrize.name}}</view>
+      </view>
+      
+      <view class="result-message">
+        <text wx:if="{{currentPrize.name === '谢谢参与'}}">很遗憾，请再接再厉！</text>
+        <text wx:else>请截图保存，到店出示即可使用！</text>
+      </view>
+      
+      <view class="result-buttons">
+        <button class="result-btn share-btn" bindtap="shareLottery">分享好友</button>
+        <button class="result-btn close-btn" bindtap="closeResult">知道了</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 抽奖规则弹窗 -->
+  <view class="rules-modal" wx:if="{{showRules}}">
+    <view class="rules-mask" bindtap="closeRules"></view>
+    <view class="rules-content">
+      <view class="rules-header">
+        <view class="rules-title">📋 抽奖规则</view>
+        <view class="rules-close" bindtap="closeRules">✕</view>
+      </view>
+      
+      <scroll-view scroll-y="true" class="rules-body">
+        <view class="rule-item">
+          <view class="rule-title">🎯 如何获得抽奖机会？</view>
+          <view class="rule-content">
+            • 完成一次订单可获得1次抽奖机会<br/>
+            • 每日最多可获得3次抽奖机会<br/>
+            • 分享给好友可额外获得1次机会
+          </view>
+        </view>
+        
+        <view class="rule-item">
+          <view class="rule-title">🏆 奖品说明</view>
+          <view class="rule-content">
+            • 免费奶茶：任选一杯店内饮品<br/>
+            • 优惠券：下次消费可直接抵扣<br/>
+            • 再来一杯：同款饮品免费续杯<br/>
+            • 精美茶具：限量版纪念茶杯
+          </view>
+        </view>
+        
+        <view class="rule-item">
+          <view class="rule-title">📝 使用须知</view>
+          <view class="rule-content">
+            • 奖品需在7天内使用，过期作废<br/>
+            • 到店出示中奖截图即可兑换<br/>
+            • 优惠券不可与其他优惠叠加<br/>
+            • 最终解释权归茶语堂所有
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

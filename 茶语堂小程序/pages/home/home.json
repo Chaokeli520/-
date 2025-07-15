@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "京西智谷",
+  "navigationBarBackgroundColor": "#8B4513",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#FFF8DC",
+  "enablePullDownRefresh": false
+}

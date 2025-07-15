@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "抽奖活动",
+  "navigationBarBackgroundColor": "#FF8C00",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#FFD700",
+  "enablePullDownRefresh": false
+}
