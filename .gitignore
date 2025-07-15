@@ -1,0 +1,51 @@
+# 微信小程序相关
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# 云函数相关
+cloudfunctions/*/node_modules/
+cloudfunctions/*/.vscode/
+cloudfunctions/*/package-lock.json
+
+# 小程序编译产物
+.preview/
+.upload/
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+*.tmp
+*.swp
+*.bak
+
+# 开发工具文件
+project.private.config.json
+
+# 调试文件
+debug.log
+
+# 编辑器文件
+*.sublime-workspace
+*.sublime-project
+
+# 依赖文件
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 构建输出
+dist/
+build/
+
+# 环境配置
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 备份文件
+*.backup
