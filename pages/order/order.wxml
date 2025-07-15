@@ -49,7 +49,7 @@
               class="add-btn"
               data-id="{{item.id}}"
               bindtap="addToCart">
-              加入购物车
+              +
             </button>
           </view>
         </view>
@@ -57,64 +57,65 @@
     </view>
   </view>
 
-  <!-- 购物车底部栏 -->
-  <view class="cart-bar" wx:if="{{cart.length > 0}}">
-    <view class="cart-info" bindtap="showCartDetail">
-      <view class="cart-icon-wrapper">
-        <view class="cart-icon">🛒</view>
-        <view class="cart-count" wx:if="{{cart.length > 0}}">{{cart.length}}</view>
-      </view>
-      <view class="cart-text">
-        <view class="cart-total">¥{{totalPrice}}</view>
-        <view class="cart-tips">点击查看购物车</view>
+  <!-- 购物车浮动按钮 -->
+  <view class="cart-float-btn" wx:if="{{totalCount > 0}}" bindtap="showCartModal">
+    <view class="cart-icon">🛒</view>
+    <view class="cart-count">{{totalCount}}</view>
+    <view class="cart-amount">¥{{totalAmount}}</view>
+  </view>
+</view>
+
+<!-- 购物车模态框 -->
+<view class="cart-modal" wx:if="{{showCart}}">
+  <view class="cart-overlay" bindtap="hideCartModal"></view>
+  <view class="cart-content">
+    <!-- 购物车头部 -->
+    <view class="cart-header">
+      <view class="cart-title">购物车 ({{totalCount}})</view>
+      <view class="cart-actions">
+        <button class="clear-btn" bindtap="clearCart">清空</button>
+        <button class="close-btn" bindtap="hideCartModal">✕</button>
       </view>
     </view>
-    <button class="checkout-btn" bindtap="submitOrder">
-      提交订单
-    </button>
-  </view>
 
-  <!-- 购物车详情弹窗 -->
-  <view class="cart-modal" wx:if="{{showCart}}">
-    <view class="cart-mask" bindtap="hideCart"></view>
-    <view class="cart-content">
-      <view class="cart-header">
-        <view class="cart-title">购物车</view>
-        <view class="cart-clear" bindtap="clearCart">清空</view>
-      </view>
-      
-      <scroll-view scroll-y="true" class="cart-list">
-        <view 
-          class="cart-item"
-          wx:for="{{cart}}"
-          wx:key="id">
-          <image src="{{item.image}}" class="cart-item-image" mode="aspectFill"></image>
-          <view class="cart-item-info">
-            <view class="cart-item-name">{{item.name}}</view>
-            <view class="cart-item-price">¥{{item.price}}</view>
-          </view>
-          <view class="quantity-controls">
-            <view 
-              class="quantity-btn minus"
-              data-id="{{item.id}}"
-              bindtap="decreaseQuantity">-</view>
-            <view class="quantity-text">{{item.quantity}}</view>
-            <view 
-              class="quantity-btn plus"
-              data-id="{{item.id}}"
-              bindtap="increaseQuantity">+</view>
-          </view>
+    <!-- 购物车商品列表 -->
+    <scroll-view scroll-y class="cart-list">
+      <view class="cart-item" wx:for="{{cart}}" wx:key="id">
+        <view class="item-image">
+          <image src="{{item.image}}" mode="aspectFill"></image>
         </view>
-      </scroll-view>
-      
-      <view class="cart-footer">
-        <view class="cart-total-info">
-          总计：¥{{totalPrice}}
+        <view class="item-info">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-price">¥{{item.price}}</view>
         </view>
-        <button class="cart-submit-btn" bindtap="submitOrder">
-          提交订单
-        </button>
+        <view class="item-controls">
+          <button 
+            class="quantity-btn decrease"
+            data-id="{{item.id}}"
+            bindtap="decreaseQuantity">
+            -
+          </button>
+          <view class="quantity">{{item.quantity}}</view>
+          <button 
+            class="quantity-btn increase"
+            data-id="{{item.id}}"
+            bindtap="increaseQuantity">
+            +
+          </button>
+        </view>
+        <view class="item-total">¥{{item.price * item.quantity}}</view>
       </view>
+    </scroll-view>
+
+    <!-- 购物车底部 -->
+    <view class="cart-footer">
+      <view class="total-info">
+        <view class="total-text">合计：</view>
+        <view class="total-amount">¥{{totalAmount}}</view>
+      </view>
+      <button class="submit-btn" bindtap="submitOrder">
+        提交订单
+      </button>
     </view>
   </view>
 </view>

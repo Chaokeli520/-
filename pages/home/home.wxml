@@ -50,28 +50,80 @@
   <view class="tea-promotion-card">
     <view class="tea-header">
       <view class="tea-icon">🍵</view>
-      <view class="tea-name">{{teaInfo.name}}</view>
+      <view class="tea-title">{{teaInfo.name}}</view>
     </view>
+    <view class="tea-description">{{teaInfo.description}}</view>
+    <view class="tea-highlight">{{teaInfo.highlight}}</view>
     
-    <view class="tea-description">
-      {{teaInfo.description}}
+    <view class="tea-actions">
+      <button class="btn-order" bindtap="goToOrder">立即点单</button>
+      <button class="btn-lottery" bindtap="goToLottery">参与抽奖</button>
     </view>
-    
-    <view class="tea-highlight">
-      <view class="highlight-text">{{teaInfo.highlight}}</view>
-    </view>
-    
-    <button class="order-btn" bindtap="goToOrder">
-      <view class="btn-content">
-        <text class="btn-text">立即点单</text>
-        <text class="btn-icon">🎯</text>
-      </view>
-    </button>
   </view>
+</view>
 
-  <!-- 底部装饰 -->
-  <view class="bottom-decoration">
-    <view class="decoration-text">京西智谷 · 科技创新</view>
-    <view class="decoration-line"></view>
+<!-- 公司详情模态框 -->
+<view class="modal-overlay" wx:if="{{showCompanyModal}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="">
+    <view class="modal-header">
+      <view class="modal-title">企业详情</view>
+      <view class="modal-close" bindtap="closeModal">✕</view>
+    </view>
+    <scroll-view scroll-y class="modal-body">
+      <view class="detail-section">
+        <view class="detail-title">公司简介</view>
+        <view class="detail-content">{{companyInfo.description}}</view>
+      </view>
+      <view class="detail-section">
+        <view class="detail-title">核心优势</view>
+        <view class="advantages-list">
+          <view class="advantage-item" wx:for="{{companyInfo.features}}" wx:key="title">
+            <view class="advantage-icon">{{item.icon}}</view>
+            <view class="advantage-text">
+              <view class="advantage-title">{{item.title}}</view>
+              <view class="advantage-desc">{{item.desc}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 联系我们模态框 -->
+<view class="modal-overlay" wx:if="{{showContactModal}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="">
+    <view class="modal-header">
+      <view class="modal-title">联系我们</view>
+      <view class="modal-close" bindtap="closeModal">✕</view>
+    </view>
+    <view class="modal-body">
+      <view class="contact-item" bindtap="makeCall">
+        <view class="contact-icon">📞</view>
+        <view class="contact-text">
+          <view class="contact-label">客服电话</view>
+          <view class="contact-value">{{companyInfo.contact.phone}}</view>
+        </view>
+        <view class="contact-action">点击拨打</view>
+      </view>
+      
+      <view class="contact-item" bindtap="copyEmail">
+        <view class="contact-icon">📧</view>
+        <view class="contact-text">
+          <view class="contact-label">商务邮箱</view>
+          <view class="contact-value">{{companyInfo.contact.email}}</view>
+        </view>
+        <view class="contact-action">点击复制</view>
+      </view>
+      
+      <view class="contact-item" bindtap="copyAddress">
+        <view class="contact-icon">📍</view>
+        <view class="contact-text">
+          <view class="contact-label">公司地址</view>
+          <view class="contact-value">{{companyInfo.contact.address}}</view>
+        </view>
+        <view class="contact-action">点击复制</view>
+      </view>
+    </view>
   </view>
 </view>

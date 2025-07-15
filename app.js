@@ -1,6 +1,16 @@
 // app.js
 App({
   onLaunch: function () {
+    // 初始化云开发环境
+    if (!wx.cloud) {
+      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
+    } else {
+      wx.cloud.init({
+        env: 'chayutang-env', // 云开发环境ID，需要在微信开发者工具中创建
+        traceUser: true
+      })
+    }
+
     // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -11,6 +21,7 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         console.log('登录成功：', res.code)
+        this.globalData.code = res.code
       }
     })
     
@@ -49,6 +60,11 @@ App({
   },
   
   globalData: {
-    userInfo: null
+    userInfo: null,
+    code: null,
+    openid: null,
+    cart: [], // 购物车
+    orderCount: 0, // 订单数量，用于计算抽奖次数
+    lotteryCount: 3 // 剩余抽奖次数
   }
 })

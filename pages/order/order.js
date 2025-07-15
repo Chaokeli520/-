@@ -1,7 +1,10 @@
 // pages/order/order.js
+const app = getApp()
+
 Page({
   data: {
     categories: [
+      { id: 0, name: '全部', active: false },
       { id: 1, name: '经典奶茶', active: true },
       { id: 2, name: '水果茶', active: false },
       { id: 3, name: '咖啡系列', active: false },
@@ -37,9 +40,18 @@ Page({
         image: 'https://via.placeholder.com/200x200/CD853F/FFFFFF?text=红豆奶茶',
         hot: true
       },
-      // 水果茶
       {
         id: 4,
+        categoryId: 1,
+        name: '椰果奶茶',
+        description: '清香椰果配丝滑奶茶',
+        price: 17,
+        image: 'https://via.placeholder.com/200x200/DEB887/FFFFFF?text=椰果奶茶',
+        hot: false
+      },
+      // 水果茶
+      {
+        id: 5,
         categoryId: 2,
         name: '柠檬蜂蜜茶',
         description: '新鲜柠檬片配天然蜂蜜',
@@ -48,94 +60,131 @@ Page({
         hot: false
       },
       {
-        id: 5,
+        id: 6,
+        categoryId: 2,
+        name: '百香果绿茶',
+        description: '酸甜百香果遇上清香绿茶',
+        price: 18,
+        image: 'https://via.placeholder.com/200x200/FFA500/FFFFFF?text=百香果茶',
+        hot: true
+      },
+      {
+        id: 7,
         categoryId: 2,
         name: '草莓果茶',
-        description: '新鲜草莓粒，酸甜可口',
-        price: 22,
+        description: '新鲜草莓制作，酸甜可口',
+        price: 20,
         image: 'https://via.placeholder.com/200x200/FF69B4/FFFFFF?text=草莓果茶',
-        hot: true
+        hot: false
+      },
+      {
+        id: 8,
+        categoryId: 2,
+        name: '芒果绿茶',
+        description: '香甜芒果粒配清香绿茶',
+        price: 19,
+        image: 'https://via.placeholder.com/200x200/FFB347/FFFFFF?text=芒果绿茶',
+        hot: false
       },
       // 咖啡系列
       {
-        id: 6,
+        id: 9,
+        categoryId: 3,
+        name: '美式咖啡',
+        description: '浓郁香醇的经典美式咖啡',
+        price: 15,
+        image: 'https://via.placeholder.com/200x200/8B4513/FFFFFF?text=美式咖啡',
+        hot: false
+      },
+      {
+        id: 10,
         categoryId: 3,
         name: '拿铁咖啡',
-        description: '香醇咖啡配丝滑奶泡',
-        price: 25,
-        image: 'https://via.placeholder.com/200x200/8B4513/FFFFFF?text=拿铁',
+        description: '香浓咖啡配丝滑奶泡',
+        price: 22,
+        image: 'https://via.placeholder.com/200x200/D2691E/FFFFFF?text=拿铁咖啡',
+        hot: true
+      },
+      {
+        id: 11,
+        categoryId: 3,
+        name: '卡布奇诺',
+        description: '经典意式咖啡，奶泡丰富',
+        price: 24,
+        image: 'https://via.placeholder.com/200x200/CD853F/FFFFFF?text=卡布奇诺',
         hot: false
       },
       // 特调饮品
       {
-        id: 7,
+        id: 12,
         categoryId: 4,
         name: '抹茶拿铁',
         description: '日式抹茶配香浓牛奶',
-        price: 28,
-        image: 'https://via.placeholder.com/200x200/90EE90/FFFFFF?text=抹茶拿铁',
+        price: 25,
+        image: 'https://via.placeholder.com/200x200/9ACD32/FFFFFF?text=抹茶拿铁',
         hot: true
+      },
+      {
+        id: 13,
+        categoryId: 4,
+        name: '焦糖玛奇朵',
+        description: '香甜焦糖配浓郁咖啡',
+        price: 26,
+        image: 'https://via.placeholder.com/200x200/DAA520/FFFFFF?text=焦糖玛奇朵',
+        hot: false
       }
     ],
     cart: [],
-    totalPrice: 0,
-    showCart: false
+    showCart: false,
+    totalAmount: 0,
+    totalCount: 0
   },
 
-  onLoad: function () {
-    this.filterProducts()
+  onLoad: function() {
+    this.loadCart()
+  },
+
+  onShow: function() {
+    this.updateCartDisplay()
   },
 
   // 切换分类
   switchCategory: function(e) {
     const categoryId = e.currentTarget.dataset.id
-    
-    // 更新分类状态
-    const categories = this.data.categories.map(cat => ({
-      ...cat,
-      active: cat.id === categoryId
+    const categories = this.data.categories.map(item => ({
+      ...item,
+      active: item.id == categoryId
     }))
     
     this.setData({
       categories,
       currentCategory: categoryId
     })
-    
-    this.filterProducts()
-  },
-
-  // 筛选商品
-  filterProducts: function() {
-    // 这里可以根据分类筛选商品，当前显示所有商品
-    // 实际应用中可以根据 currentCategory 筛选
   },
 
   // 添加到购物车
   addToCart: function(e) {
     const productId = e.currentTarget.dataset.id
-    const product = this.data.products.find(p => p.id === productId)
+    const product = this.data.products.find(item => item.id == productId)
     
     if (!product) return
+
+    let cart = [...this.data.cart]
+    const existingItem = cart.find(item => item.id == productId)
     
-    const { cart } = this.data
-    const existingItem = cart.find(item => item.id === productId)
-    
-    let newCart
     if (existingItem) {
-      // 增加数量
-      newCart = cart.map(item => 
-        item.id === productId 
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
+      existingItem.quantity += 1
     } else {
-      // 添加新商品
-      newCart = [...cart, { ...product, quantity: 1 }]
+      cart.push({
+        ...product,
+        quantity: 1
+      })
     }
     
-    this.updateCart(newCart)
+    this.setData({ cart })
+    this.saveCart()
+    this.updateCartDisplay()
     
-    // 显示添加成功提示
     wx.showToast({
       title: '已添加到购物车',
       icon: 'success',
@@ -143,18 +192,20 @@ Page({
     })
   },
 
-  // 更新购物车
-  updateCart: function(newCart) {
-    const totalPrice = newCart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  // 更新购物车显示
+  updateCartDisplay: function() {
+    const { cart } = this.data
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0)
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
     
     this.setData({
-      cart: newCart,
-      totalPrice
+      totalCount,
+      totalAmount
     })
   },
 
   // 显示购物车
-  showCartDetail: function() {
+  showCartModal: function() {
     if (this.data.cart.length === 0) {
       wx.showToast({
         title: '购物车为空',
@@ -162,40 +213,45 @@ Page({
       })
       return
     }
-    
-    this.setData({
-      showCart: true
-    })
+    this.setData({ showCart: true })
   },
 
   // 隐藏购物车
-  hideCart: function() {
-    this.setData({
-      showCart: false
-    })
+  hideCartModal: function() {
+    this.setData({ showCart: false })
   },
 
   // 增加商品数量
   increaseQuantity: function(e) {
     const productId = e.currentTarget.dataset.id
-    const newCart = this.data.cart.map(item =>
-      item.id === productId
-        ? { ...item, quantity: item.quantity + 1 }
-        : item
-    )
-    this.updateCart(newCart)
+    let cart = [...this.data.cart]
+    const item = cart.find(item => item.id == productId)
+    
+    if (item) {
+      item.quantity += 1
+      this.setData({ cart })
+      this.saveCart()
+      this.updateCartDisplay()
+    }
   },
 
   // 减少商品数量
   decreaseQuantity: function(e) {
     const productId = e.currentTarget.dataset.id
-    const newCart = this.data.cart.map(item =>
-      item.id === productId
-        ? { ...item, quantity: Math.max(0, item.quantity - 1) }
-        : item
-    ).filter(item => item.quantity > 0)
+    let cart = [...this.data.cart]
+    const itemIndex = cart.findIndex(item => item.id == productId)
     
-    this.updateCart(newCart)
+    if (itemIndex > -1) {
+      if (cart[itemIndex].quantity > 1) {
+        cart[itemIndex].quantity -= 1
+      } else {
+        cart.splice(itemIndex, 1)
+      }
+      
+      this.setData({ cart })
+      this.saveCart()
+      this.updateCartDisplay()
+    }
   },
 
   // 清空购物车
@@ -205,8 +261,12 @@ Page({
       content: '确定要清空购物车吗？',
       success: (res) => {
         if (res.confirm) {
-          this.updateCart([])
-          this.hideCart()
+          this.setData({ 
+            cart: [],
+            showCart: false
+          })
+          this.saveCart()
+          this.updateCartDisplay()
         }
       }
     })
@@ -222,25 +282,33 @@ Page({
       return
     }
 
-    // 模拟订单提交
     wx.showLoading({
-      title: '正在提交订单...'
+      title: '提交订单中...'
     })
 
+    // 模拟提交订单
     setTimeout(() => {
       wx.hideLoading()
       
+      // 增加全局订单数和抽奖次数
+      app.globalData.orderCount += 1
+      app.globalData.lotteryCount += 1
+      
+      // 清空购物车
+      this.setData({ 
+        cart: [],
+        showCart: false
+      })
+      this.saveCart()
+      this.updateCartDisplay()
+      
       wx.showModal({
         title: '订单提交成功',
-        content: `总金额：¥${this.data.totalPrice}\n\n点击确定参与抽奖活动！`,
+        content: '您的订单已提交成功，可以去抽奖页面参与抽奖活动！',
         confirmText: '去抽奖',
+        cancelText: '继续购买',
         success: (res) => {
           if (res.confirm) {
-            // 清空购物车
-            this.updateCart([])
-            this.hideCart()
-            
-            // 跳转到抽奖页面
             wx.switchTab({
               url: '/pages/lottery/lottery'
             })
@@ -248,5 +316,17 @@ Page({
         }
       })
     }, 2000)
+  },
+
+  // 保存购物车到本地存储
+  saveCart: function() {
+    wx.setStorageSync('cart', this.data.cart)
+  },
+
+  // 从本地存储加载购物车
+  loadCart: function() {
+    const cart = wx.getStorageSync('cart') || []
+    this.setData({ cart })
+    this.updateCartDisplay()
   }
 })

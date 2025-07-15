@@ -1,28 +1,94 @@
 // pages/lottery/lottery.js
+const app = getApp()
+
 Page({
   data: {
     isSpinning: false,
     currentAngle: 0,
+    finalAngle: 0,
     prizes: [
-      { id: 1, name: '免费奶茶', icon: '🥤', probability: 0.15, color: '#FFD700' },
-      { id: 2, name: '5元优惠券', icon: '🎫', probability: 0.25, color: '#FF69B4' },
-      { id: 3, name: '再来一杯', icon: '🍵', probability: 0.10, color: '#32CD32' },
-      { id: 4, name: '谢谢参与', icon: '🌟', probability: 0.30, color: '#87CEEB' },
-      { id: 5, name: '10元优惠券', icon: '💰', probability: 0.15, color: '#FFA500' },
-      { id: 6, name: '精美茶具', icon: '🏆', probability: 0.05, color: '#DC143C' }
+      { 
+        id: 1, 
+        name: '免费奶茶', 
+        icon: '🥤', 
+        probability: 0.15, 
+        color: '#FFD700',
+        angle: 0,
+        startAngle: 0,
+        endAngle: 60
+      },
+      { 
+        id: 2, 
+        name: '5元优惠券', 
+        icon: '🎫', 
+        probability: 0.25, 
+        color: '#FF69B4',
+        angle: 60,
+        startAngle: 60,
+        endAngle: 120
+      },
+      { 
+        id: 3, 
+        name: '再来一杯', 
+        icon: '🍵', 
+        probability: 0.10, 
+        color: '#32CD32',
+        angle: 120,
+        startAngle: 120,
+        endAngle: 180
+      },
+      { 
+        id: 4, 
+        name: '谢谢参与', 
+        icon: '🌟', 
+        probability: 0.30, 
+        color: '#87CEEB',
+        angle: 180,
+        startAngle: 180,
+        endAngle: 240
+      },
+      { 
+        id: 5, 
+        name: '10元优惠券', 
+        icon: '💰', 
+        probability: 0.15, 
+        color: '#FFA500',
+        angle: 240,
+        startAngle: 240,
+        endAngle: 300
+      },
+      { 
+        id: 6, 
+        name: '精美茶具', 
+        icon: '🏆', 
+        probability: 0.05, 
+        color: '#DC143C',
+        angle: 300,
+        startAngle: 300,
+        endAngle: 360
+      }
     ],
     lotteryHistory: [],
     showResult: false,
     currentPrize: null,
-    userLotteryCount: 3, // 用户剩余抽奖次数
+    userLotteryCount: 0, // 用户剩余抽奖次数
     totalLotteryCount: 0,  // 总共抽奖次数
     showRules: false,
-    wheelAngle: 0
+    showHistory: false,
+    wheelAngle: 0,
+    animationDuration: 3000, // 动画持续时间
+    rules: [
+      '每成功下一单可获得1次抽奖机会',
+      '每人每天最多可抽奖10次',
+      '奖品有效期为30天，请及时使用',
+      '中奖后请联系店员领取实物奖品',
+      '最终解释权归茶语堂所有'
+    ]
   },
 
   onLoad: function() {
-    this.loadLotteryHistory()
-    this.calculateAngles()
+    this.calculatePrizeAngles()
+    this.loadLotteryData()
   },
 
   onShow: function() {
@@ -31,12 +97,13 @@ Page({
   },
 
   // 计算每个奖品的角度
-  calculateAngles: function() {
+  calculatePrizeAngles: function() {
     const { prizes } = this.data
     const anglePerPrize = 360 / prizes.length
     
     const prizesWithAngles = prizes.map((prize, index) => ({
       ...prize,
+      angle: index * anglePerPrize,
       startAngle: index * anglePerPrize,
       endAngle: (index + 1) * anglePerPrize,
       midAngle: index * anglePerPrize + anglePerPrize / 2
@@ -49,29 +116,27 @@ Page({
 
   // 检查抽奖机会
   checkLotteryChance: function() {
-    // 从其他页面跳转过来可能获得抽奖机会
-    const pages = getCurrentPages()
-    const prevPage = pages[pages.length - 2]
+    const lotteryCount = app.globalData.lotteryCount || 0
+    const orderCount = app.globalData.orderCount || 0
     
-    if (prevPage && prevPage.route === 'pages/order/order') {
-      // 从点单页跳转过来，检查是否刚完成订单
-      this.setData({
-        userLotteryCount: Math.max(1, this.data.userLotteryCount)
-      })
-    }
+    this.setData({
+      userLotteryCount: lotteryCount,
+      totalLotteryCount: this.data.totalLotteryCount
+    })
   },
 
   // 开始抽奖
   startLottery: function() {
-    if (this.data.isSpinning) return
-    
+    if (this.data.isSpinning) {
+      return
+    }
+
     if (this.data.userLotteryCount <= 0) {
       wx.showModal({
         title: '抽奖次数不足',
-        content: '您今日的抽奖次数已用完，完成订单可获得更多抽奖机会！',
-        showCancel: true,
-        cancelText: '知道了',
-        confirmText: '去点单',
+        content: '您暂无抽奖次数，请先下单获取抽奖机会！',
+        confirmText: '去下单',
+        cancelText: '取消',
         success: (res) => {
           if (res.confirm) {
             wx.switchTab({
@@ -83,89 +148,103 @@ Page({
       return
     }
 
+    // 开始转动
     this.setData({
       isSpinning: true
     })
 
     // 随机选择奖品
-    const selectedPrize = this.getRandomPrize()
+    const selectedPrize = this.selectPrize()
+    const targetAngle = selectedPrize.midAngle
     
-    // 计算旋转角度
-    const baseRotation = 1800 // 基础旋转5圈
-    const targetAngle = 360 - selectedPrize.midAngle // 反向计算
-    const finalAngle = baseRotation + targetAngle + (Math.random() - 0.5) * 30 // 添加随机偏移
+    // 计算最终角度（多转几圈 + 目标角度）
+    const extraRotations = 5 // 额外转5圈
+    const finalAngle = this.data.currentAngle + (360 * extraRotations) + (360 - targetAngle)
     
-    // 更新轮盘角度
     this.setData({
-      wheelAngle: this.data.wheelAngle + finalAngle
+      finalAngle: finalAngle,
+      wheelAngle: finalAngle,
+      currentPrize: selectedPrize
     })
 
-    // 播放旋转动画并显示结果
+    // 动画结束后显示结果
     setTimeout(() => {
       this.showLotteryResult(selectedPrize)
-    }, 3000)
+    }, this.data.animationDuration + 500)
   },
 
-  // 随机获取奖品
-  getRandomPrize: function() {
-    const { prizes } = this.data
+  // 根据概率选择奖品
+  selectPrize: function() {
     const random = Math.random()
-    let cumulativeProbability = 0
+    let cumulative = 0
     
-    for (let prize of prizes) {
-      cumulativeProbability += prize.probability
-      if (random <= cumulativeProbability) {
+    for (let prize of this.data.prizes) {
+      cumulative += prize.probability
+      if (random <= cumulative) {
         return prize
       }
     }
     
-    // 兜底返回最后一个奖品
-    return prizes[prizes.length - 1]
+    // 默认返回最后一个奖品
+    return this.data.prizes[this.data.prizes.length - 1]
   },
 
   // 显示抽奖结果
   showLotteryResult: function(prize) {
     // 减少抽奖次数
     const newLotteryCount = Math.max(0, this.data.userLotteryCount - 1)
+    app.globalData.lotteryCount = newLotteryCount
+    
+    // 增加总抽奖次数
     const newTotalCount = this.data.totalLotteryCount + 1
     
-    // 添加到历史记录
-    const newHistory = [
-      {
-        id: Date.now(),
-        prize: prize,
-        time: new Date().toLocaleString(),
-        date: new Date()
-      },
-      ...this.data.lotteryHistory
-    ].slice(0, 10) // 最多保留10条记录
-
+    // 保存抽奖记录
+    const lotteryRecord = {
+      id: Date.now(),
+      prize: prize,
+      date: new Date().toLocaleString(),
+      used: false
+    }
+    
+    const newHistory = [lotteryRecord, ...this.data.lotteryHistory]
+    
     this.setData({
       isSpinning: false,
       showResult: true,
       currentPrize: prize,
       userLotteryCount: newLotteryCount,
       totalLotteryCount: newTotalCount,
-      lotteryHistory: newHistory
+      lotteryHistory: newHistory,
+      currentAngle: this.data.finalAngle % 360
     })
-
-    // 保存到本地存储
-    this.saveLotteryHistory(newHistory)
     
-    // 震动反馈
-    wx.vibrateShort()
+    // 保存数据到本地存储
+    this.saveLotteryData()
+    
+    // 显示中奖提示
+    let congratsMessage = ''
+    if (prize.name === '谢谢参与') {
+      congratsMessage = '很遗憾，再接再厉！'
+    } else {
+      congratsMessage = `恭喜您获得：${prize.name}！`
+    }
+    
+    wx.showToast({
+      title: congratsMessage,
+      icon: prize.name === '谢谢参与' ? 'none' : 'success',
+      duration: 2000
+    })
   },
 
   // 关闭结果弹窗
   closeResult: function() {
     this.setData({
-      showResult: false,
-      currentPrize: null
+      showResult: false
     })
   },
 
   // 显示抽奖规则
-  showLotteryRules: function() {
+  showRules: function() {
     this.setData({
       showRules: true
     })
@@ -178,86 +257,70 @@ Page({
     })
   },
 
-  // 获取更多抽奖机会
-  getMoreChance: function() {
+  // 显示抽奖历史
+  showHistory: function() {
+    this.setData({
+      showHistory: true
+    })
+  },
+
+  // 关闭历史弹窗
+  closeHistory: function() {
+    this.setData({
+      showHistory: false
+    })
+  },
+
+  // 使用奖品
+  usePrize: function(e) {
+    const recordId = e.currentTarget.dataset.id
+    let history = [...this.data.lotteryHistory]
+    const record = history.find(item => item.id == recordId)
+    
+    if (record && !record.used) {
+      record.used = true
+      this.setData({
+        lotteryHistory: history
+      })
+      this.saveLotteryData()
+      
+      wx.showToast({
+        title: '奖品已使用',
+        icon: 'success'
+      })
+    }
+  },
+
+  // 保存抽奖数据到本地存储
+  saveLotteryData: function() {
+    wx.setStorageSync('lotteryHistory', this.data.lotteryHistory)
+    wx.setStorageSync('totalLotteryCount', this.data.totalLotteryCount)
+  },
+
+  // 从本地存储加载抽奖数据
+  loadLotteryData: function() {
+    const history = wx.getStorageSync('lotteryHistory') || []
+    const totalCount = wx.getStorageSync('totalLotteryCount') || 0
+    
+    this.setData({
+      lotteryHistory: history,
+      totalLotteryCount: totalCount
+    })
+  },
+
+  // 去下单
+  goToOrder: function() {
     wx.switchTab({
       url: '/pages/order/order'
     })
   },
 
-  // 分享抽奖结果
-  shareLottery: function() {
-    if (!this.data.currentPrize) return
-    
-    wx.showShareMenu({
-      withShareTicket: true,
-      menus: ['shareAppMessage', 'shareTimeline']
-    })
-    
-    wx.showToast({
-      title: '分享成功',
-      icon: 'success'
-    })
-  },
-
-  // 加载抽奖历史
-  loadLotteryHistory: function() {
-    try {
-      const history = wx.getStorageSync('lotteryHistory') || []
-      const totalCount = wx.getStorageSync('totalLotteryCount') || 0
-      
-      this.setData({
-        lotteryHistory: history,
-        totalLotteryCount: totalCount
-      })
-    } catch (e) {
-      console.error('加载抽奖历史失败：', e)
-    }
-  },
-
-  // 保存抽奖历史
-  saveLotteryHistory: function(history) {
-    try {
-      wx.setStorageSync('lotteryHistory', history)
-      wx.setStorageSync('totalLotteryCount', this.data.totalLotteryCount)
-    } catch (e) {
-      console.error('保存抽奖历史失败：', e)
-    }
-  },
-
-  // 清空抽奖历史
-  clearHistory: function() {
-    wx.showModal({
-      title: '确认清空',
-      content: '确定要清空所有抽奖记录吗？',
-      success: (res) => {
-        if (res.confirm) {
-          this.setData({
-            lotteryHistory: [],
-            totalLotteryCount: 0
-          })
-          
-          try {
-            wx.removeStorageSync('lotteryHistory')
-            wx.removeStorageSync('totalLotteryCount')
-            wx.showToast({
-              title: '清空成功',
-              icon: 'success'
-            })
-          } catch (e) {
-            console.error('清空历史失败：', e)
-          }
-        }
-      }
-    })
-  },
-
-  // 页面分享
+  // 分享功能
   onShareAppMessage: function() {
     return {
       title: '茶语堂抽奖活动，快来试试手气！',
       path: '/pages/lottery/lottery',
-      imageUrl: '/images/lottery_share.png'
+      imageUrl: '/images/share-lottery.jpg'
     }
   }
 })

@@ -1,4 +1,6 @@
 // pages/home/home.js
+const app = getApp()
+
 Page({
   data: {
     bannerImages: [
@@ -10,7 +12,7 @@ Page({
     companyInfo: {
       name: '北京昇腾科技有限公司',
       location: '京西智谷',
-      description: '坐落在京西智谷的北京昇腾科技有限公司，是一家专注于人工智能和科技创新的高新技术企业。',
+      description: '坐落在京西智谷的北京昇腾科技有限公司，是一家专注于人工智能和科技创新的高新技术企业。公司致力于推动AI技术在各行业的应用落地，为客户提供完整的智能化解决方案。',
       features: [
         {
           icon: '🏢',
@@ -32,13 +34,20 @@ Page({
           title: '人才荟萃',
           desc: '汇聚行业精英，共同成长'
         }
-      ]
+      ],
+      contact: {
+        phone: '400-123-4567',
+        email: 'contact@shengteng.com',
+        address: '北京市门头沟区京西智谷科技园'
+      }
     },
     teaInfo: {
       name: '茶语堂',
       description: '位于京西智谷的精品茶饮店，为园区提供优质茶饮服务',
       highlight: '现在下单即可参与抽奖活动！'
-    }
+    },
+    showCompanyModal: false,
+    showContactModal: false
   },
 
   onLoad: function () {
@@ -51,67 +60,98 @@ Page({
     }
   },
 
-  // 轮播图自动切换
+  // 轮播图相关方法
   startBannerTimer: function() {
     this.bannerTimer = setInterval(() => {
-      const { bannerImages, currentBanner } = this.data
+      const { currentBanner, bannerImages } = this.data
       const nextBanner = (currentBanner + 1) % bannerImages.length
       this.setData({
         currentBanner: nextBanner
       })
-    }, 3000)
+    }, 4000)
   },
 
-  // 手动切换轮播图
   onBannerChange: function(e) {
     this.setData({
       currentBanner: e.detail.current
     })
   },
 
-  // 跳转到点单页
+  // 显示公司详情
+  showCompanyDetail: function() {
+    this.setData({
+      showCompanyModal: true
+    })
+  },
+
+  // 联系我们
+  contactUs: function() {
+    this.setData({
+      showContactModal: true
+    })
+  },
+
+  // 关闭模态框
+  closeModal: function() {
+    this.setData({
+      showCompanyModal: false,
+      showContactModal: false
+    })
+  },
+
+  // 拨打电话
+  makeCall: function() {
+    wx.makePhoneCall({
+      phoneNumber: this.data.companyInfo.contact.phone,
+      success: function() {
+        console.log('拨号成功')
+      },
+      fail: function() {
+        wx.showToast({
+          title: '拨号失败',
+          icon: 'none'
+        })
+      }
+    })
+  },
+
+  // 复制邮箱
+  copyEmail: function() {
+    wx.setClipboardData({
+      data: this.data.companyInfo.contact.email,
+      success: function() {
+        wx.showToast({
+          title: '邮箱已复制',
+          icon: 'success'
+        })
+      }
+    })
+  },
+
+  // 复制地址
+  copyAddress: function() {
+    wx.setClipboardData({
+      data: this.data.companyInfo.contact.address,
+      success: function() {
+        wx.showToast({
+          title: '地址已复制',
+          icon: 'success'
+        })
+      }
+    })
+  },
+
+  // 跳转到点单页面
   goToOrder: function() {
     wx.switchTab({
       url: '/pages/order/order'
     })
   },
 
-  // 查看公司详情
-  showCompanyDetail: function() {
-    wx.showModal({
-      title: '京西智谷 · 北京昇腾',
-      content: '京西智谷作为北京西部重要的科技创新区域，汇聚了众多高新技术企业。北京昇腾科技有限公司作为其中的佼佼者，致力于人工智能技术的研发与应用，为行业发展贡献力量。',
-      showCancel: false,
-      confirmText: '了解更多'
-    })
-  },
-
-  // 联系我们
-  contactUs: function() {
-    wx.showActionSheet({
-      itemList: ['拨打电话', '查看地址', '官方网站'],
-      success: (res) => {
-        switch (res.tapIndex) {
-          case 0:
-            wx.makePhoneCall({
-              phoneNumber: '400-888-8888'
-            })
-            break
-          case 1:
-            wx.showModal({
-              title: '公司地址',
-              content: '北京市石景山区京西智谷科技园区',
-              showCancel: false
-            })
-            break
-          case 2:
-            wx.showToast({
-              title: '敬请期待',
-              icon: 'none'
-            })
-            break
-        }
-      }
+  // 跳转到抽奖页面
+  goToLottery: function() {
+    wx.switchTab({
+      url: '/pages/lottery/lottery'
     })
   }
 })

@@ -1,5 +1,5 @@
 {
-  "description": "项目配置文件",
+  "description": "京西智谷茶语堂小程序",
   "packOptions": {
     "ignore": [],
     "include": []
@@ -45,7 +45,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.19.4",
   "appid": "your-app-id-here",
-  "projectname": "my-wechat-miniprogram",
+  "projectname": "chayutang-miniprogram",
   "condition": {
     "search": {
       "list": []
@@ -65,5 +65,6 @@
     "miniprogram": {
       "list": []
     }
-  }
+  },
+  "cloudfunctionRoot": "cloudfunctions/"
 }
