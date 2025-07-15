@@ -1,0 +1,117 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "description": "用户信息表",
+      "permissions": {
+        "read": "doc.openid == auth.openid",
+        "write": "doc.openid == auth.openid"
+      },
+      "indexes": [
+        {
+          "name": "openid_index",
+          "keys": [{"openid": 1}],
+          "unique": true
+        },
+        {
+          "name": "level_index",
+          "keys": [{"level": 1}]
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "description": "订单信息表",
+      "permissions": {
+        "read": "doc.openid == auth.openid",
+        "write": "doc.openid == auth.openid"
+      },
+      "indexes": [
+        {
+          "name": "openid_index",
+          "keys": [{"openid": 1}]
+        },
+        {
+          "name": "status_index",
+          "keys": [{"status": 1}]
+        },
+        {
+          "name": "createTime_index",
+          "keys": [{"createTime": -1}]
+        }
+      ]
+    },
+    {
+      "name": "lottery_chances",
+      "description": "抽奖机会表",
+      "permissions": {
+        "read": "doc.openid == auth.openid",
+        "write": "doc.openid == auth.openid"
+      },
+      "indexes": [
+        {
+          "name": "openid_index",
+          "keys": [{"openid": 1}]
+        },
+        {
+          "name": "orderNo_index",
+          "keys": [{"orderNo": 1}]
+        }
+      ]
+    },
+    {
+      "name": "lottery_records",
+      "description": "抽奖记录表",
+      "permissions": {
+        "read": "doc.openid == auth.openid",
+        "write": "doc.openid == auth.openid"
+      },
+      "indexes": [
+        {
+          "name": "openid_index",
+          "keys": [{"openid": 1}]
+        },
+        {
+          "name": "createTime_index",
+          "keys": [{"createTime": -1}]
+        },
+        {
+          "name": "used_index",
+          "keys": [{"used": 1}]
+        }
+      ]
+    },
+    {
+      "name": "products",
+      "description": "商品信息表",
+      "permissions": {
+        "read": "true",
+        "write": "false"
+      },
+      "indexes": [
+        {
+          "name": "categoryId_index",
+          "keys": [{"categoryId": 1}]
+        },
+        {
+          "name": "hot_index",
+          "keys": [{"hot": 1}]
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "description": "商品分类表",
+      "permissions": {
+        "read": "true",
+        "write": "false"
+      },
+      "indexes": [
+        {
+          "name": "sort_index",
+          "keys": [{"sort": 1}]
+        }
+      ]
+    }
+  ]
+}

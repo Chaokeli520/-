@@ -46,6 +46,7 @@
   "libVersion": "2.19.4",
   "appid": "your-app-id-here",
   "projectname": "chayutang-miniprogram",
+  "cloudfunctionRoot": "cloudfunctions/",
   "condition": {
     "search": {
       "list": []
@@ -66,5 +67,10 @@
       "list": []
     }
   },
-  "cloudfunctionRoot": "cloudfunctions/"
+  "cloudbaseRoot": "cloudbase-templates/",
+  "scripts": {
+    "beforeCompile": "",
+    "beforePreview": "",
+    "beforeUpload": ""
+  }
 }
