@@ -1,0 +1,157 @@
+<!--pages/lottery/lottery.wxml-->
+<view class="container">
+  <!-- 头部信息 -->
+  <view class="header">
+    <view class="title">🎉 茶语堂抽奖</view>
+    <view class="subtitle">完成订单即可参与抽奖</view>
+    <view class="lottery-info">
+      <view class="info-item">
+        <text class="info-label">剩余次数</text>
+        <text class="info-value">{{userLotteryCount}}</text>
+      </view>
+      <view class="info-item">
+        <text class="info-label">总抽奖次数</text>
+        <text class="info-value">{{totalLotteryCount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 抽奖转盘 -->
+  <view class="lottery-wheel-container">
+    <view class="wheel-wrapper">
+      <!-- 转盘背景 -->
+      <view 
+        class="lottery-wheel {{isSpinning ? 'spinning' : ''}}"
+        style="transform: rotate({{wheelAngle}}deg); transition: {{isSpinning ? 'transform 3s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none'}};">
+        <view 
+          class="prize-sector"
+          wx:for="{{prizes}}"
+          wx:key="id"
+          style="background: {{item.color}}; transform: rotate({{item.angle}}deg);">
+          <view class="prize-content">
+            <view class="prize-icon">{{item.icon}}</view>
+            <view class="prize-name">{{item.name}}</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 中心指针 -->
+      <view class="wheel-pointer"></view>
+      
+      <!-- 中心按钮 -->
+      <view class="center-button {{isSpinning ? 'spinning' : ''}}" bindtap="startLottery">
+        <view class="center-text">
+          <text wx:if="{{!isSpinning}}">开始\n抽奖</text>
+          <text wx:else>抽奖中...</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能按钮区域 -->
+  <view class="action-buttons">
+    <button class="action-btn" bindtap="showRules">
+      <view class="btn-icon">📋</view>
+      <view class="btn-text">抽奖规则</view>
+    </button>
+    <button class="action-btn" bindtap="showHistory">
+      <view class="btn-icon">📜</view>
+      <view class="btn-text">中奖记录</view>
+    </button>
+    <button class="action-btn" bindtap="goToOrder">
+      <view class="btn-icon">🛒</view>
+      <view class="btn-text">去下单</view>
+    </button>
+  </view>
+
+  <!-- 温馨提示 -->
+  <view class="tips-section">
+    <view class="tips-title">💡 温馨提示</view>
+    <view class="tips-content">
+      每完成一笔订单可获得1次抽奖机会，奖品丰富，快来试试手气吧！
+    </view>
+  </view>
+</view>
+
+<!-- 抽奖结果弹窗 -->
+<view class="result-modal" wx:if="{{showResult}}">
+  <view class="result-overlay" bindtap="closeResult"></view>
+  <view class="result-content">
+    <view class="result-header">
+      <view class="result-title">🎊 抽奖结果</view>
+      <view class="result-close" bindtap="closeResult">✕</view>
+    </view>
+    <view class="result-body">
+      <view class="prize-display">
+        <view class="prize-icon-large">{{currentPrize.icon}}</view>
+        <view class="prize-name-large">{{currentPrize.name}}</view>
+        <view class="congratulations" wx:if="{{currentPrize.name !== '谢谢参与'}}">
+          恭喜您获得奖品！
+        </view>
+        <view class="encourage" wx:else>
+          再接再厉，下次一定中！
+        </view>
+      </view>
+    </view>
+    <view class="result-footer">
+      <button class="continue-btn" bindtap="closeResult">继续抽奖</button>
+      <button class="order-btn" bindtap="goToOrder">去下单</button>
+    </view>
+  </view>
+</view>
+
+<!-- 抽奖规则弹窗 -->
+<view class="rules-modal" wx:if="{{showRules}}">
+  <view class="rules-overlay" bindtap="closeRules"></view>
+  <view class="rules-content">
+    <view class="rules-header">
+      <view class="rules-title">📋 抽奖规则</view>
+      <view class="rules-close" bindtap="closeRules">✕</view>
+    </view>
+    <view class="rules-body">
+      <view class="rule-item" wx:for="{{rules}}" wx:key="index">
+        <view class="rule-number">{{index + 1}}.</view>
+        <view class="rule-text">{{item}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 中奖记录弹窗 -->
+<view class="history-modal" wx:if="{{showHistory}}">
+  <view class="history-overlay" bindtap="closeHistory"></view>
+  <view class="history-content">
+    <view class="history-header">
+      <view class="history-title">📜 中奖记录</view>
+      <view class="history-close" bindtap="closeHistory">✕</view>
+    </view>
+    <scroll-view scroll-y class="history-body">
+      <view class="history-item" wx:for="{{lotteryHistory}}" wx:key="id">
+        <view class="history-prize">
+          <view class="history-icon">{{item.prize.icon}}</view>
+          <view class="history-info">
+            <view class="history-name">{{item.prize.name}}</view>
+            <view class="history-date">{{item.date}}</view>
+          </view>
+        </view>
+        <view class="history-status">
+          <view class="status-tag {{item.used ? 'used' : 'unused'}}" wx:if="{{item.prize.name !== '谢谢参与'}}">
+            {{item.used ? '已使用' : '未使用'}}
+          </view>
+          <button 
+            class="use-btn" 
+            wx:if="{{!item.used && item.prize.name !== '谢谢参与'}}"
+            data-id="{{item.id}}"
+            bindtap="usePrize">
+            立即使用
+          </button>
+        </view>
+      </view>
+      <view class="no-history" wx:if="{{lotteryHistory.length === 0}}">
+        <view class="no-history-icon">🎯</view>
+        <view class="no-history-text">暂无中奖记录</view>
+        <view class="no-history-tip">快去下单获取抽奖机会吧！</view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

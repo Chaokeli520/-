@@ -1,0 +1,129 @@
+<!--pages/home/home.wxml-->
+<view class="container">
+  <!-- 顶部轮播图 -->
+  <view class="banner-section">
+    <swiper class="banner-swiper" 
+            current="{{currentBanner}}" 
+            bindchange="onBannerChange"
+            indicator-dots="true"
+            indicator-color="rgba(255,255,255,0.5)"
+            indicator-active-color="#D2691E"
+            autoplay="true"
+            interval="3000"
+            circular="true">
+      <swiper-item wx:for="{{bannerImages}}" wx:key="index">
+        <image src="{{item}}" class="banner-image" mode="aspectFill"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 公司介绍卡片 -->
+  <view class="company-card">
+    <view class="card-header">
+      <view class="company-name">{{companyInfo.name}}</view>
+      <view class="company-location">📍 {{companyInfo.location}}</view>
+    </view>
+    
+    <view class="company-description">
+      {{companyInfo.description}}
+    </view>
+    
+    <view class="action-buttons">
+      <button class="btn-detail" bindtap="showCompanyDetail">了解详情</button>
+      <button class="btn-contact" bindtap="contactUs">联系我们</button>
+    </view>
+  </view>
+
+  <!-- 特色功能展示 -->
+  <view class="features-section">
+    <view class="section-title">企业特色</view>
+    <view class="features-grid">
+      <view class="feature-item" wx:for="{{companyInfo.features}}" wx:key="title">
+        <view class="feature-icon">{{item.icon}}</view>
+        <view class="feature-title">{{item.title}}</view>
+        <view class="feature-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 茶语堂推广卡片 -->
+  <view class="tea-promotion-card">
+    <view class="tea-header">
+      <view class="tea-icon">🍵</view>
+      <view class="tea-title">{{teaInfo.name}}</view>
+    </view>
+    <view class="tea-description">{{teaInfo.description}}</view>
+    <view class="tea-highlight">{{teaInfo.highlight}}</view>
+    
+    <view class="tea-actions">
+      <button class="btn-order" bindtap="goToOrder">立即点单</button>
+      <button class="btn-lottery" bindtap="goToLottery">参与抽奖</button>
+    </view>
+  </view>
+</view>
+
+<!-- 公司详情模态框 -->
+<view class="modal-overlay" wx:if="{{showCompanyModal}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="">
+    <view class="modal-header">
+      <view class="modal-title">企业详情</view>
+      <view class="modal-close" bindtap="closeModal">✕</view>
+    </view>
+    <scroll-view scroll-y class="modal-body">
+      <view class="detail-section">
+        <view class="detail-title">公司简介</view>
+        <view class="detail-content">{{companyInfo.description}}</view>
+      </view>
+      <view class="detail-section">
+        <view class="detail-title">核心优势</view>
+        <view class="advantages-list">
+          <view class="advantage-item" wx:for="{{companyInfo.features}}" wx:key="title">
+            <view class="advantage-icon">{{item.icon}}</view>
+            <view class="advantage-text">
+              <view class="advantage-title">{{item.title}}</view>
+              <view class="advantage-desc">{{item.desc}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
+
+<!-- 联系我们模态框 -->
+<view class="modal-overlay" wx:if="{{showContactModal}}" bindtap="closeModal">
+  <view class="modal-content" catchtap="">
+    <view class="modal-header">
+      <view class="modal-title">联系我们</view>
+      <view class="modal-close" bindtap="closeModal">✕</view>
+    </view>
+    <view class="modal-body">
+      <view class="contact-item" bindtap="makeCall">
+        <view class="contact-icon">📞</view>
+        <view class="contact-text">
+          <view class="contact-label">客服电话</view>
+          <view class="contact-value">{{companyInfo.contact.phone}}</view>
+        </view>
+        <view class="contact-action">点击拨打</view>
+      </view>
+      
+      <view class="contact-item" bindtap="copyEmail">
+        <view class="contact-icon">📧</view>
+        <view class="contact-text">
+          <view class="contact-label">商务邮箱</view>
+          <view class="contact-value">{{companyInfo.contact.email}}</view>
+        </view>
+        <view class="contact-action">点击复制</view>
+      </view>
+      
+      <view class="contact-item" bindtap="copyAddress">
+        <view class="contact-icon">📍</view>
+        <view class="contact-text">
+          <view class="contact-label">公司地址</view>
+          <view class="contact-value">{{companyInfo.contact.address}}</view>
+        </view>
+        <view class="contact-action">点击复制</view>
+      </view>
+    </view>
+  </view>
+</view>

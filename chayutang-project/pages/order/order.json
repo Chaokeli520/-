@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "茶语堂",
+  "navigationBarBackgroundColor": "#8B4513",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#F5F5F5",
+  "enablePullDownRefresh": false
+}

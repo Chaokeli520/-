@@ -1,0 +1,121 @@
+<!--pages/order/order.wxml-->
+<view class="container">
+  <!-- 头部标题 -->
+  <view class="header">
+    <view class="shop-name">🍵 茶语堂</view>
+    <view class="shop-subtitle">京西智谷精品茶饮</view>
+  </view>
+
+  <!-- 分类导航 -->
+  <view class="category-nav">
+    <scroll-view scroll-x="true" class="category-scroll">
+      <view class="category-list">
+        <view 
+          class="category-item {{item.active ? 'active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="switchCategory">
+          {{item.name}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="products-section">
+    <view class="product-grid">
+      <view 
+        class="product-card"
+        wx:for="{{products}}"
+        wx:key="id"
+        wx:if="{{item.categoryId === currentCategory || currentCategory === 0}}">
+        
+        <!-- 热销标签 -->
+        <view class="hot-tag" wx:if="{{item.hot}}">🔥</view>
+        
+        <!-- 商品图片 -->
+        <view class="product-image-wrapper">
+          <image src="{{item.image}}" class="product-image" mode="aspectFill"></image>
+        </view>
+        
+        <!-- 商品信息 -->
+        <view class="product-info">
+          <view class="product-name">{{item.name}}</view>
+          <view class="product-description">{{item.description}}</view>
+          <view class="product-footer">
+            <view class="product-price">¥{{item.price}}</view>
+            <button 
+              class="add-btn"
+              data-id="{{item.id}}"
+              bindtap="addToCart">
+              +
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 购物车浮动按钮 -->
+  <view class="cart-float-btn" wx:if="{{totalCount > 0}}" bindtap="showCartModal">
+    <view class="cart-icon">🛒</view>
+    <view class="cart-count">{{totalCount}}</view>
+    <view class="cart-amount">¥{{totalAmount}}</view>
+  </view>
+</view>
+
+<!-- 购物车模态框 -->
+<view class="cart-modal" wx:if="{{showCart}}">
+  <view class="cart-overlay" bindtap="hideCartModal"></view>
+  <view class="cart-content">
+    <!-- 购物车头部 -->
+    <view class="cart-header">
+      <view class="cart-title">购物车 ({{totalCount}})</view>
+      <view class="cart-actions">
+        <button class="clear-btn" bindtap="clearCart">清空</button>
+        <button class="close-btn" bindtap="hideCartModal">✕</button>
+      </view>
+    </view>
+
+    <!-- 购物车商品列表 -->
+    <scroll-view scroll-y class="cart-list">
+      <view class="cart-item" wx:for="{{cart}}" wx:key="id">
+        <view class="item-image">
+          <image src="{{item.image}}" mode="aspectFill"></image>
+        </view>
+        <view class="item-info">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-price">¥{{item.price}}</view>
+        </view>
+        <view class="item-controls">
+          <button 
+            class="quantity-btn decrease"
+            data-id="{{item.id}}"
+            bindtap="decreaseQuantity">
+            -
+          </button>
+          <view class="quantity">{{item.quantity}}</view>
+          <button 
+            class="quantity-btn increase"
+            data-id="{{item.id}}"
+            bindtap="increaseQuantity">
+            +
+          </button>
+        </view>
+        <view class="item-total">¥{{item.price * item.quantity}}</view>
+      </view>
+    </scroll-view>
+
+    <!-- 购物车底部 -->
+    <view class="cart-footer">
+      <view class="total-info">
+        <view class="total-text">合计：</view>
+        <view class="total-amount">¥{{totalAmount}}</view>
+      </view>
+      <button class="submit-btn" bindtap="submitOrder">
+        提交订单
+      </button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,247 @@
+/**app.wxss**/
+/* 全局容器样式 */
+.container {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 茶语堂主题公共样式 */
+.btn {
+  margin-top: 30rpx;
+  background: linear-gradient(45deg, #8B4513, #D2691E);
+  color: #fff;
+  border-radius: 25rpx;
+  padding: 25rpx 40rpx;
+  font-size: 28rpx;
+  border: none;
+  box-shadow: 0 4rpx 15rpx rgba(139, 69, 19, 0.3);
+  transition: all 0.3s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(139, 69, 19, 0.3);
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #8B4513, #D2691E);
+}
+
+.btn-secondary {
+  background: linear-gradient(45deg, #D2691E, #DAA520);
+}
+
+.btn-success {
+  background: linear-gradient(45deg, #32CD32, #90EE90);
+}
+
+.btn-warning {
+  background: linear-gradient(45deg, #FFA500, #FFD700);
+}
+
+.btn-danger {
+  background: linear-gradient(45deg, #FF4444, #FF6666);
+}
+
+/* 文本样式 */
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-primary {
+  color: #8B4513;
+}
+
+.text-secondary {
+  color: #D2691E;
+}
+
+.text-muted {
+  color: #999;
+}
+
+/* 间距样式 */
+.margin-top {
+  margin-top: 20rpx;
+}
+
+.margin-bottom {
+  margin-bottom: 20rpx;
+}
+
+.margin-left {
+  margin-left: 20rpx;
+}
+
+.margin-right {
+  margin-right: 20rpx;
+}
+
+.padding {
+  padding: 20rpx;
+}
+
+.padding-large {
+  padding: 40rpx;
+}
+
+.padding-small {
+  padding: 10rpx;
+}
+
+/* 页面标题样式 */
+.page-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #8B4513;
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #8B4513;
+  margin-bottom: 30rpx;
+}
+
+/* 卡片样式 */
+.card {
+  background-color: #fff;
+  border-radius: 15rpx;
+  box-shadow: 0 4rpx 20rpx rgba(139, 69, 19, 0.1);
+  margin: 20rpx;
+  padding: 30rpx;
+  transition: all 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8rpx 30rpx rgba(139, 69, 19, 0.15);
+  transform: translateY(-2rpx);
+}
+
+.card-primary {
+  border-left: 6rpx solid #8B4513;
+}
+
+.card-secondary {
+  border-left: 6rpx solid #D2691E;
+}
+
+/* 徽章样式 */
+.badge {
+  display: inline-block;
+  padding: 8rpx 15rpx;
+  font-size: 22rpx;
+  border-radius: 20rpx;
+  color: white;
+  background: #8B4513;
+}
+
+.badge-primary {
+  background: #8B4513;
+}
+
+.badge-secondary {
+  background: #D2691E;
+}
+
+.badge-success {
+  background: #32CD32;
+}
+
+.badge-warning {
+  background: #FFA500;
+}
+
+.badge-danger {
+  background: #FF4444;
+}
+
+/* 分割线 */
+.divider {
+  height: 1rpx;
+  background: #E0E0E0;
+  margin: 30rpx 0;
+}
+
+.divider-thick {
+  height: 2rpx;
+  background: linear-gradient(45deg, #8B4513, #D2691E);
+  margin: 40rpx 0;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 80rpx 40rpx;
+  color: #999;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+/* 响应式网格 */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10rpx;
+}
+
+.col {
+  flex: 1;
+  padding: 0 10rpx;
+}
+
+.col-half {
+  flex: 0 0 50%;
+  padding: 0 10rpx;
+}
+
+.col-third {
+  flex: 0 0 33.333%;
+  padding: 0 10rpx;
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20rpx); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
